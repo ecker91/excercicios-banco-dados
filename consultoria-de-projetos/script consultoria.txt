@@ -1,0 +1,61 @@
+CREATE DATABASE consultoria;
+USE consultoria;
+
+CREATE TABLE empresa(
+id_empresa INT NOT NULL AUTO_INCREMENT,
+nome_empresa VARCHAR(45) NOT NULL,
+endereco_empresa VARCHAR(45),
+PRIMARY KEY (id_empresa)
+);
+
+CREATE TABLE projeto(
+id_projeto INT NOT NULL AUTO_INCREMENT,
+data_inicio DATE NOT NULL,
+data_fim DATE NOT NULL,
+preco_projeto DECIMAL(8,2) NOT NULL,
+PRIMARY KEY (id_projeto)
+);
+
+CREATE TABLE unidade(
+id_unidade INT NOT NULL AUTO_INCREMENT,
+nome_gerente VARCHAR(45) NOT NULL,
+nome_supervisor VARCHAR(45) NOT NULL,
+PRIMARY KEY (id_unidade)
+);
+
+CREATE TABLE consultor(
+id_consultor INT NOT NULL AUTO_INCREMENT,
+nome_consultor VARCHAR(45) NOT NULL,
+rg_consutor INT NOT NULL,
+especializacao_consultor VARCHAR(45),
+funcao_projeto VARCHAR(45) NOT NULL,
+PRIMARY KEY (id_consultor)
+);
+
+CREATE TABLE departamento(
+id_departamento INT NOT NULL AUTO_INCREMENT,
+nome_departamento VARCHAR(45) NOT NULL,
+sigla_departamento CHAR(5),
+centro_custo VARCHAR(45) NOT NULL,
+PRIMARY KEY (id_departamento)
+);
+
+ALTER TABLE departamento
+ADD COLUMN unidade_id INT,
+ADD FOREIGN KEY (unidade_id)
+REFERENCES unidade(id_unidade);
+
+ALTER TABLE projeto
+ADD COLUMN departamento_id INT,
+ADD FOREIGN KEY (departamento_id)
+REFERENCES departamento(id_departamento);
+
+ALTER TABLE projeto
+ADD COLUMN empresa_id INT,
+ADD FOREIGN KEY (empresa_id)
+REFERENCES empresa(id_empresa);
+
+ALTER TABLE projeto
+ADD COLUMN consultor_id INT,
+ADD FOREIGN KEY (consultor_id)
+REFERENCES consultor(id_consultor);
