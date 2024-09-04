@@ -46,3 +46,24 @@ REFERENCES ticket(id_ticket);
 -- modificar observacao de txt para varchar(45)
 ALTER TABLE ticket
 MODIFY COLUMN observacao VARCHAR(45);
+
+ALTER TABLE setor
+MODIFY COLUMN descricao VARCHAR(100);
+
+ALTER TABLE ticket
+RENAME COLUMN codigo_barra TO codigo;
+
+ALTER TABLE estacionamento
+RENAME TO parking;
+
+ALTER TABLE parking
+RENAME COLUMN id_estacionamento TO id_parking;
+
+ALTER TABLE setor
+RENAME COLUMN estacionamento_id TO parking_id;
+
+ALTER TABLE parking
+RENAME COLUMN id_estacionamento TO id_parking;
+
+ALTER TABLE setor
+RENAME COLUMN estacionamento_id TO parking_id;
