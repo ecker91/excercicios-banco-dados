@@ -1,0 +1,69 @@
+CREATE DATABASE parking;
+USE parking;
+
+CREATE TABLE vaga(
+id_vaga INT NOT NULL AUTO_INCREMENT,
+numero_vagas INT NOT NULL,
+PRIMARY KEY (id_vaga)
+);
+
+CREATE TABLE setor(
+id_setor INT NOT NULL AUTO_INCREMENT,
+nome VARCHAR(45) NOT NULL,
+descricao VARCHAR(45) NOT NULL,
+PRIMARY KEY (id_setor)
+);
+
+CREATE TABLE estacionamento(
+id_estacionamento INT NOT NULL AUTO_INCREMENT,
+nome VARCHAR(45) NOT NULL,
+CNPJ BIGINT NOT NULL,
+PRIMARY KEY (id_estacionamento)
+);
+
+CREATE TABLE ticket(
+id_ticket INT NOT NULL AUTO_INCREMENT,
+codigo_barra INT NOT NULL,
+observacao TEXT NOT NULL,
+PRIMARY KEY (id_ticket)
+);
+
+ALTER TABLE vaga
+ADD COLUMN setor_id INT,
+ADD FOREIGN KEY (setor_id)
+REFERENCES setor(id_setor);
+
+ALTER TABLE setor
+ADD COLUMN estacionamento_id INT,
+ADD FOREIGN KEY (estacionamento_id)
+REFERENCES estacionamento(id_estacionamento);
+
+ALTER TABLE estacionamento
+ADD COLUMN ticket_id INT,
+ADD FOREIGN KEY (ticket_id)
+REFERENCES ticket(id_ticket);
+
+-- modificar observacao de txt para varchar(45)
+ALTER TABLE ticket
+MODIFY COLUMN observacao VARCHAR(45);
+
+ALTER TABLE setor
+MODIFY COLUMN descricao VARCHAR(100);
+
+ALTER TABLE ticket
+RENAME COLUMN codigo_barra TO codigo;
+
+ALTER TABLE estacionamento
+RENAME TO parking;
+
+ALTER TABLE parking
+RENAME COLUMN id_estacionamento TO id_parking;
+
+ALTER TABLE setor
+RENAME COLUMN estacionamento_id TO parking_id;
+
+ALTER TABLE parking
+RENAME COLUMN id_estacionamento TO id_parking;
+
+ALTER TABLE setor
+RENAME COLUMN estacionamento_id TO parking_id;
