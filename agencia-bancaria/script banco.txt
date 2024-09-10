@@ -1,0 +1,93 @@
+CREATE DATABASE banco;
+USE banco;
+
+CREATE TABLE cliente(
+cod_cliente INT NOT NULL AUTO_INCREMENT,
+nom_cliente VARCHAR(100) NOT NULL,
+num_cpf_cnpj BIGINT NOT NULL,
+num_celular BIGINT NOT NULL,
+rua VARCHAR(100) NOT NULL,
+numero INT NOT NULL,
+bairro VARCHAR(45) NOT NULL,
+cep INT NOT NULL,
+cidade VARCHAR(45) NOT NULL,
+estado VARCHAR(20) NOT NULL,
+PRIMARY KEY (cod_cliente)
+);
+
+CREATE TABLE categoria_cliente(
+cod_categoria_cliente INT NOT NULL AUTO_INCREMENT,
+nom_categoria_cliente VARCHAR(100) NOT NULL,
+PRIMARY KEY (cod_categoria_cliente)
+);
+
+CREATE TABLE tipo_conta(
+cod_tipo_conta INT NOT NULL AUTO_INCREMENT,
+des_tipo_conta VARCHAR(100) NOT NULL,
+PRIMARY KEY (cod_tipo_conta)
+);
+
+CREATE TABLE agencia(
+num_agencia INT NOT NULL AUTO_INCREMENT,
+nom_agencia VARCHAR(100) NOT NULL,
+PRIMARY KEY (num_agencia)
+);
+
+CREATE TABLE conta(
+num_conta INT NOT NULL AUTO_INCREMENT,
+val_saldo DECIMAL(11,2) NOT NULL,
+PRIMARY KEY (num_conta)
+);
+
+ALTER TABLE cliente
+ADD COLUMN categoria_cliente_cod INT,
+ADD FOREIGN KEY (categoria_cliente_cod)
+REFERENCES categoria_cliente(cod_categoria_cliente);
+
+ALTER TABLE conta
+ADD COLUMN tipo_conta_cod INT,
+ADD FOREIGN KEY(tipo_conta_cod)
+REFERENCES tipo_conta(cod_tipo_conta);
+
+ALTER TABLE conta
+ADD COLUMN agencia_num INT,
+ADD FOREIGN KEY(agencia_num)
+REFERENCES agencia(num_agencia);
+
+ALTER TABLE conta
+ADD COLUMN cliente_cod INT,
+ADD FOREIGN KEY(cliente_cod)
+REFERENCES cliente(cod_cliente);
+
+ALTER TABLE cliente
+RENAME COLUMN num_celular TO telefone;
+
+ALTER TABLE categoria_cliente
+ADD COLUMN observacao TEXT;
+
+ALTER TABLE cliente
+ADD COLUMN renda DECIMAL(9,2);
+
+ALTER TABLE tipo_conta
+MODIFY COLUMN des_tipo_conta TEXT;
+
+ALTER TABLE agencia
+MODIFY COLUMN nom_agencia VARCHAR(45);
+
+ALTER TABLE cliente
+DROP COLUMN estado;
+
+ALTER TABLE tipo_conta
+ADD COLUMN observacao TEXT;
+
+ALTER TABLE categoria_cliente
+RENAME TO categoria;
+
+ALTER TABLE categoria 
+RENAME COLUMN cod_categoria_cliente TO cod_categoria;
+
+ALTER TABLE categoria 
+RENAME COLUMN nom_categoria_cliente TO nom_categoria;
+
+ALTER TABLE cliente
+RENAME COLUMN categoria_cliente_cod TO categoria_cod;
