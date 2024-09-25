@@ -1,0 +1,169 @@
+CREATE DATABASE livraria;
+USE livraria;
+
+CREATE TABLE cliente(
+id_cliente INT NOT NULL AUTO_INCREMENT,
+nome_cliente VARCHAR(45),
+rg_cliente INT,
+cpf_cliente BIGINT,
+rua_cliente VARCHAR(100),
+numero_cliente INT,
+bairro_cliente VARCHAR(45),
+cidade_cliente VARCHAR(100),
+estado_cliente VARCHAR(45),
+cep_cliente INT,
+PRIMARY KEY(id_cliente)
+);
+
+CREATE TABLE editora(
+id_editora INT NOT NULL AUTO_INCREMENT,
+nomefantasia_editora VARCHAR(45),
+razaosocial_editora INT,
+rua_editora VARCHAR(100),
+numero_editora INT,
+bairro_editora VARCHAR(45),
+cidade_editora VARCHAR(100),
+estado_editora VARCHAR(45),
+cep_editora INT,
+PRIMARY KEY(id_editora)
+);
+
+CREATE TABLE autor(
+id_autor INT NOT NULL AUTO_INCREMENT,
+nome_autor VARCHAR(45),
+rg_autor INT,
+PRIMARY KEY (id_autor)
+);
+
+CREATE TABLE financiador(
+id_financiador INT NOT NULL AUTO_INCREMENT,
+nome_financiador VARCHAR(45),
+cnpj_financiador BIGINT,
+PRIMARY KEY (id_financiador)
+);
+
+CREATE TABLE livro(
+id_livro INT NOT NULL AUTO_INCREMENT,
+isbn_livro BIGINT,
+titulo_livro VARCHAR(45),
+preco_livro DECIMAL(6,2),
+categoria_livro VARCHAR(45),
+PRIMARY KEY (id_livro)
+);
+
+CREATE TABLE pedido(
+id_pedido INT NOT NULL AUTO_INCREMENT,
+qtd_pedido INT,
+PRIMARY KEY (id_pedido)
+);
+
+CREATE TABLE telefone(
+id_telefone INT NOT NULL AUTO_INCREMENT,
+num_telefone BIGINT,
+PRIMARY KEY (id_telefone)
+);
+
+ALTER TABLE livro
+ADD COLUMN autor_id INT,
+ADD FOREIGN KEY (autor_id)
+REFERENCES autor(id_autor);
+
+ALTER TABLE livro
+ADD COLUMN editora_id INT,
+ADD FOREIGN KEY (editora_id)
+REFERENCES editora(id_editora);
+
+ALTER TABLE livro
+ADD COLUMN financiador_id INT,
+ADD FOREIGN KEY (financiador_id)
+REFERENCES financiador(id_financiador);
+
+ALTER TABLE pedido
+ADD COLUMN livro_id INT,
+ADD FOREIGN KEY (livro_id)
+REFERENCES livro(id_livro);
+
+ALTER TABLE pedido
+ADD COLUMN cliente_id INT,
+ADD FOREIGN KEY (cliente_id)
+REFERENCES cliente(id_cliente);
+
+ALTER TABLE telefone 
+ADD COLUMN editora_id INT,
+ADD FOREIGN KEY(editora_id)
+REFERENCES editora(id_editora);
+
+INSERT INTO autor
+(nome_autor)
+VALUES
+('Shakespeare'),
+('Da Vinci'),
+('Capitão Nascimento'),
+('Nostradamus'),
+('João');
+
+INSERT INTO editora
+(nomefantasia_editora)
+VALUES
+('Masterpieces'),
+('Old Rome'),
+('BOPE'),
+('Advinhadores'),
+('Igreja Católica');
+
+INSERT INTO financiador
+(nome_financiador)
+VALUES
+('Monarquia Inglesa'),
+('Elon Musk'),
+('Brigadeiro Anônimo'),
+('Alex Jones'),
+('Jesus');
+
+INSERT INTO cliente
+(nome_cliente)
+VALUES
+('Francois'),
+('Maria Aparecida'),
+('Aspira Neto'),
+('Tio do zap'),
+('Judas');
+
+INSERT INTO livro
+(titulo_livro, editora_id, autor_id, financiador_id)
+VALUES
+('Hamlet',1,1,1),
+('As Anotações de Da Vinci',2,2,2),
+('Como fazer parte das forças especials do BOPE',3,3,3),
+('O fim do mundo em 2031',4,4,4),
+('Biblia',5,5,5);
+
+INSERT INTO pedido
+(qtd_pedido, cliente_id, livro_id)
+VALUES
+(1,1,1),
+(1,2,2),
+(5,3,3),
+(1,4,4),
+(0,5,5);
+
+SELECT * FROM editora;
+SELECT * FROM cliente;
+SELECT * FROM pedido;
+SELECT * FROM livro;
+SELECT * FROM autor;
+
+DELETE FROM cliente
+WHERE id_cliente = 1;
+
+DELETE FROM livro
+WHERE id_livro = 2; 
+
+DELETE FROM editora
+WHERE id_editora = 5;
+
+DELETE FROM autor
+WHERE id_autor = 3;
+
+DELETE FROM financiador
+WHERE id_financiador = 4;
