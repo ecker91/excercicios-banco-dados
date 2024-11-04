@@ -1,0 +1,126 @@
+CREATE DATABASE cursos;
+USE cursos;
+
+CREATE TABLE aluno (
+id_aluno INT AUTO_INCREMENT,
+nome VARCHAR(45),
+PRIMARY KEY(id_aluno)
+);
+
+CREATE TABLE curso (
+id_curso INT AUTO_INCREMENT,
+nome VARCHAR(45),
+duracao INT,
+PRIMARY KEY (id_curso)
+);
+
+CREATE TABLE inscricao (
+id_inscricao INT AUTO_INCREMENT,
+aluno_id INT,
+dt_inscricao DATE,
+curso_id INT,
+PRIMARY KEY(id_inscricao),
+FOREIGN KEY(curso_id) REFERENCES curso (id_curso),
+FOREIGN KEY(aluno_id) REFERENCES aluno (id_aluno)
+);
+
+CREATE TABLE mensalidade(
+id_mensalidade INT AUTO_INCREMENT,
+inscricao_id INT,
+dt_vencimento DATE,
+status_pagamento ENUM ('Pago', 'Não Pago'),
+valor DECIMAL (5,2),
+PRIMARY KEY(id_mensalidade),
+FOREIGN KEY (inscricao_id) REFERENCES inscricao (id_inscricao)
+);
+
+INSERT INTO curso
+(nome, duracao)
+VALUES
+('Python',1),
+('JavaScript',2),
+('HTML',1),
+('CSS',1),
+('React',3);
+
+INSERT INTO aluno
+(nome)
+VALUES
+('João'),
+('José'),
+('Maria'),
+('Carlos'),
+('José');
+
+INSERT INTO inscricao
+(dt_inscricao, aluno_id, curso_id)
+VALUES 
+('2020-01-02' , 4, 4 ),
+('2020-01-02' , 3, 3 ),
+('2020-01-02' , 2, 2 ),
+('2020-06-02' , 4, 4 ),
+('2020-06-02' , 3, 3 ),
+('2020-06-02' , 2, 2 );
+
+INSERT INTO inscricao
+(dt_inscricao)
+VALUES
+('2020-06-02');
+
+INSERT INTO mensalidade
+(dt_vencimento, valor, status_pagamento, inscricao_id)
+VALUES 
+('2020-01-10' , 550, 'Pago', 1 ),
+('2020-01-10' , 540, 'Pago', 2 ),
+('2020-01-10' , 530, 'Pago', 3 ),
+('2020-06-10' , 580, 'Não Pago', 4 ),
+('2020-06-10' , 570, 'Não Pago', 5 ),
+('2020-06-10' , 560, 'Não Pago', 6 );
+
+
+-- Exiba a soma de todas as mensalidades de alunos
+
+SELECT aluno.nome, sum(mensalidade.valor) AS soma_mensalidades FROM aluno 
+JOIN inscricao ON aluno.id_aluno = inscricao.aluno_id
+JOIN mensalidade ON mensalidade.inscricao_id = inscricao.id_inscricao
+GROUP BY aluno.nome;
+
+-- Exiba a soma de todas as mensalidades NÃO PAGO
+
+SELECT sum(valor) AS soma_mensalidades_nao_pagas FROM mensalidade WHERE status_pagamento = 'Não Pago';
+
+-- Exiba o valor medio das mensalidades por aluno
+
+SELECT aluno.nome, avg(mensalidade.valor) AS soma_mensalidades FROM aluno 
+JOIN inscricao ON aluno.id_aluno = inscricao.aluno_id
+JOIN mensalidade ON mensalidade.inscricao_id = inscricao.id_inscricao
+GROUP BY aluno.nome;
+
+-- Exiba o valor maximo de mensalidade
+
+SELECT max(valor) AS max_mensalidades FROM mensalidade;
+
+-- Exiba o valor minimo de mensalidade
+
+SELECT min(valor) AS min_mensalidades FROM mensalidade;
+
+-- Exiba o valor minimo de mensalidade NÃO PAGA
+
+SELECT min(valor) AS min_mensalidades_nao_pagas FROM mensalidade WHERE status_pagamento = 'Não Pago';
+
+-- Exiba o nome dos alunos sem duplicar com distinct e order by
+
+SELECT DISTINCT nome FROM aluno;
+SELECT nome FROM aluno GROUP BY nome;
+
+-- Exiba o somatorio das mensalidades previas a 10 de junho
+
+SELECT sum(valor) FROM mensalidade WHERE dt_vencimento < '2020-6-10';
+
+-- Exiba o somatorio das mensalidades após 9 de junho
+
+SELECT sum(valor) FROM mensalidade WHERE dt_vencimento > '2020-6-9';
+
+-- Exiba o somatorio de mensalidades entre id 2 a 5
+
+SELECT sum(valor) FROM mensalidade WHERE id_mensalidade >=2 AND id_mensalidade <= 5;
